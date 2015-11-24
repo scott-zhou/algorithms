@@ -29,8 +29,6 @@ class Prioritize(object):
         while todo:
             if not depent:
                 print("ERROR: No depend relationship when have item in todo list.")
-                print todo
-                print depent
                 return False
             rmRelation = set([])
             rmItem = set([])
@@ -59,6 +57,4 @@ class Prioritize(object):
                 for left in todo:
                     self._priorityLevel[left] = curLev
                 todo.clear()
-            print("current stution, todo list:", todo)
-            print("current stution, depent list:", depent)
         return True
