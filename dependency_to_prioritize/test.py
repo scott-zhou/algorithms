@@ -16,3 +16,15 @@ deps = set(
 p = Prioritize()
 p.convertFrom(deps)
 print(p._priorityLevel)
+
+deps = set(
+    [('a', 'b'),
+     ('b', 'c'),
+     ('b', 'd'),
+     ('c', 'e'),
+     ('d', 'e'),
+     ('e', 'f'),
+     ('g', 'd')
+     ])
+p.convertFrom(deps)
+print(p._priorityLevel)

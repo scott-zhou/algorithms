@@ -29,6 +29,8 @@ class Prioritize(object):
         while todo:
             if not depent:
                 print("ERROR: No depend relationship when have item in todo list.")
+                print todo
+                print depent
                 return False
             rmRelation = set([])
             rmItem = set([])
@@ -44,13 +46,19 @@ class Prioritize(object):
                 print("ERROR: dependency relationship error. Circular dependency exist.")
                 return False
             depent -= rmRelation
+            todo -= rmItem
             curLev = curLev + 1
             if len(depent) == 1:
                 (f, t) = depent.pop()
                 self._priorityLevel[t] = curLev
                 self._priorityLevel[f] = curLev+1
-                curLev += 2
+                rmItem.clear()
                 rmItem.add(f)
                 rmItem.add(t)
-            todo -= rmItem
+                todo -= rmItem
+                for left in todo:
+                    self._priorityLevel[left] = curLev
+                todo.clear()
+            print("current stution, todo list:", todo)
+            print("current stution, depent list:", depent)
         return True
