@@ -5,12 +5,6 @@ class Prioritize(object):
     def __init__(self):
         self._priorityLevel = {}
 
-    def _haveDependency(self, item, dependRelations):
-        for (f, t) in dependRelations:
-            if item == f:
-                return True
-        return False
-
     def getPrioritizeLevel(self, item):
         if item in self._priorityLevel:
             return self._priorityLevel[item]
@@ -18,6 +12,14 @@ class Prioritize(object):
 
     def reset(self):
         self._priorityLevel.clear()
+
+    @staticmethod
+    def _rmItemRelationship(relationship, item):
+        rmRelation = set([])
+        for (f, t) in relationship:
+            if t == item or f == item:
+                rmRelation.add((f, t))
+        relationship -= rmRelation
 
     def convertFrom(self, dependRelations):
         """
@@ -35,34 +37,16 @@ class Prioritize(object):
             todo.add(f)
             todo.add(t)
         while todo:
-            rmRelation = set([])
-            rmItem = set([])
-            if len(depent) == 1:
-                (f, t) = depent.pop()
-                self._priorityLevel[t] = curLev
-                self._priorityLevel[f] = curLev+1
-                rmItem.add(f)
-                rmItem.add(t)
-                todo -= rmItem
-                for left in todo:
-                    self._priorityLevel[left] = curLev
-                todo.clear()
-                break
-            if not depent:
-                print("ERROR: No depend relationship when have item in todo list.")
-                return False
-            for item in todo:
-                if self._haveDependency(item, depent):
-                    continue
-                self._priorityLevel[item] = curLev
-                for (f, t) in depent:
-                    if t == item:
-                        rmRelation.add((f, t))
-                rmItem.add(item)
-            if not rmRelation:
+            exclude = set([])
+            for (f, t) in depent:
+                exclude.add(f)
+            curLevItem = todo - exclude
+            if not curLevItem:
                 print("ERROR: dependency relationship error. Circular dependency exist.")
                 return False
-            depent -= rmRelation
-            todo -= rmItem
+            for item in curLevItem:
+                Prioritize._rmItemRelationship(depent, item)
+                self._priorityLevel[item] = curLev
+            todo -= curLevItem
             curLev = curLev + 1
         return True
