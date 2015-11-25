@@ -11,6 +11,14 @@ class Prioritize(object):
                 return True
         return False
 
+    def getPrioritizeLevel(self, item):
+        if item in self._priorityLevel:
+            return self._priorityLevel[item]
+        return -1
+
+    def reset(self):
+        self._priorityLevel.clear()
+
     def convertFrom(self, dependRelations):
         """
         Return true when convert is succeed.
@@ -19,7 +27,7 @@ class Prioritize(object):
         dependRelations - Set of dependency relationship.
             example: set([(A, B), (A, C)]) means A depends on B and C.
         """
-        self._priorityLevel.clear()
+        self.reset()
         curLev = 0
         depent = dependRelations.copy()
         todo = set([])
