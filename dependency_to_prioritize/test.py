@@ -28,3 +28,15 @@ deps = set(
      ])
 p.convertFrom(deps)
 print(p._priorityLevel)
+
+deps = set([('a', 'b')])
+p.convertFrom(deps)
+print(p._priorityLevel)
+
+deps = set(
+    [('a', 'b'),
+     ('b', 'c'),
+     ('c', 'a')
+     ])
+p.convertFrom(deps)
+print(p._priorityLevel)

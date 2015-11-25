@@ -27,11 +27,22 @@ class Prioritize(object):
             todo.add(f)
             todo.add(t)
         while todo:
+            rmRelation = set([])
+            rmItem = set([])
+            if len(depent) == 1:
+                (f, t) = depent.pop()
+                self._priorityLevel[t] = curLev
+                self._priorityLevel[f] = curLev+1
+                rmItem.add(f)
+                rmItem.add(t)
+                todo -= rmItem
+                for left in todo:
+                    self._priorityLevel[left] = curLev
+                todo.clear()
+                break
             if not depent:
                 print("ERROR: No depend relationship when have item in todo list.")
                 return False
-            rmRelation = set([])
-            rmItem = set([])
             for item in todo:
                 if self._haveDependency(item, depent):
                     continue
@@ -46,15 +57,4 @@ class Prioritize(object):
             depent -= rmRelation
             todo -= rmItem
             curLev = curLev + 1
-            if len(depent) == 1:
-                (f, t) = depent.pop()
-                self._priorityLevel[t] = curLev
-                self._priorityLevel[f] = curLev+1
-                rmItem.clear()
-                rmItem.add(f)
-                rmItem.add(t)
-                todo -= rmItem
-                for left in todo:
-                    self._priorityLevel[left] = curLev
-                todo.clear()
         return True
