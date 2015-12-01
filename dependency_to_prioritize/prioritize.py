@@ -1,3 +1,5 @@
+import logging
+
 class Prioritize(object):
     '''
     Class which convert dependency relationship to priority level
@@ -42,7 +44,7 @@ class Prioritize(object):
                 exclude.add(f)
             curLevItem = todo - exclude
             if not curLevItem:
-                print("ERROR: dependency relationship error. Circular dependency exist.")
+                logging.warning("Dependency relationship error. Circular dependency exist.")
                 return False
             for item in curLevItem:
                 Prioritize._rmItemRelationship(depent, item)
